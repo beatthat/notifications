@@ -1,6 +1,6 @@
 {
   "name": "unity-notifications",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "utils",
   "main": "index.js",
   "repository": {
@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "ncp": "^2.0.0",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "unity-bindings": "beatthat/unity-bindings#^0.0.1"
   }
 }
