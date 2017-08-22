@@ -1,11 +1,11 @@
 {
   "name": "tests",
-  "version": "0.0.3",
+  "version": "0.0.1",
   "description": "",
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "unity-notifications": "github:beatthat/unity-notifications#0.0.2"
+    "unity-notifications": "github:beatthat/unity-notifications#0.0.4"
   },
   "devDependencies": {
     "babel-core": "^5.8.23",
