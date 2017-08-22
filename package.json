@@ -24,6 +24,7 @@
   "dependencies": {
     "ncp": "^2.0.0",
     "mkdirp": "^0.5.1",
-    "unity-bindings": "beatthat/unity-bindings#^0.0.1"
+    "unity-bindings": "beatthat/unity-bindings#^0.0.2",
+    "unity-editor-utils": "beatthat/unity-editor-utils#^0.0.1"
   }
 }

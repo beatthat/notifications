@@ -3,10 +3,10 @@ using UnityEngine;
 
 using System.Collections.Generic;
 
-using BeatThat.App.Editor;
-using BeatThat.App;
+//using BeatThat.App.Editor;
+//using BeatThat.App;
 
-namespace BeatThat
+namespace BeatThat.App
 {
 	[CustomPropertyDrawer(typeof(NotificationType))]
 	public class NotificationTypePropertyDrawer : PropertyDrawer
