@@ -1,6 +1,6 @@
 {
   "name": "unity-notifications",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "utils",
   "main": "index.js",
   "repository": {
@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/beatthat/unity-notifications",
   "scripts": {
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node scripts/postinstall.js",
+    "install:test": "rm -f *.tgz npm cache clear && yarn cache clean && yarn pack --filename test-pkg.tgz && cd test && npm run clean && yarn install --force"
   },
   "dependencies": {
     "mkdirp": "^0.5.1",
