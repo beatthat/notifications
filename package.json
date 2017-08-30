@@ -1,6 +1,6 @@
 {
   "name": "unity-notifications",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "utils",
   "main": "index.js",
   "repository": {
@@ -20,13 +20,13 @@
   "homepage": "https://github.com/beatthat/unity-notifications",
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
-    "install:test": "rm -f *.tgz npm cache clear && yarn cache clean && yarn pack --filename test-pkg.tgz && cd test && npm run clean && yarn install --force"
+    "install:test": "rm -f *.tgz npm cache clear && npm pack && cd test && npm run clean && npm install"
   },
   "dependencies": {
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
-    "unity-bindings": "beatthat/unity-bindings#^0.0.2",
-    "unity-pools": "beatthat/unity-pools#^0.0.5",
-    "unity-type-utils": "beatthat/unity-type-utils#^0.0.3"
+    "unity-bindings": "beatthat/unity-bindings#semver:^0.0.2",
+    "unity-pools": "beatthat/unity-pools#semver:^0.0.5",
+    "unity-type-utils": "beatthat/unity-type-utils#semver:^0.0.3"
   }
 }
