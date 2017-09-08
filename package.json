@@ -1,6 +1,7 @@
 {
-  "name": "unity-notifications",
-  "version": "0.0.9",
+  "name": "notifications",
+  "scope": "ape",
+  "version": "0.0.10",
   "description": "utils",
   "main": "index.js",
   "repository": {
@@ -20,13 +21,15 @@
   "homepage": "https://github.com/beatthat/unity-notifications",
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
-    "install:test": "rm -f *.tgz npm cache clear && npm pack && cd test && npm run clean && npm install"
+    "install:test": "rm -f *.tgz && npm pack && cd test && npm run clean && npm install",
+    "clean": "rm -f *.tgz && cd test && npm run clean",
+    "sync:test2src": "rsync -rv --include '*/' --include '*.cs' --exclude '*' --prune-empty-dirs test/Assets/Plugins/${npm_package_scope}/${npm_package_name}/ ./src/${npm_package_name}/"
   },
   "dependencies": {
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
-    "unity-bindings": "beatthat/unity-bindings#semver:^0.0.2",
-    "unity-pools": "beatthat/unity-pools#semver:^0.0.5",
-    "unity-type-utils": "beatthat/unity-type-utils#semver:^0.0.3"
+    "bindings": "beatthat/bindings#semver:^0.0.4",
+    "pools": "beatthat/pools#semver:^0.0.7",
+    "type-utils": "beatthat/type-utils#semver:^0.0.5"
   }
 }

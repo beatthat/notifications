@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace BeatThat.App
 {
 	/// <summary>
-	/// A notification that will dispatch via the NotificationBus.
+	/// Default Notification object type passed that to listeners by the NotificationBus (listeners can also bind a custom type via generics).
 	/// Notifications are identified by their 'type'
 	/// Additionally, notifications may pass a single param 'body'
 	/// or if a notification has muliple params it may pass key value properties.
