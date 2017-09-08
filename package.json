@@ -2,7 +2,7 @@
   "name": "notifications",
   "scope": "ape",
   "version": "0.0.10",
-  "description": "utils",
+  "description": "Global system for pub/sub notification events by string 'type'.",
   "main": "index.js",
   "repository": {
     "type": "git",
