@@ -21,15 +21,24 @@
   "homepage": "https://github.com/beatthat/unity-notifications",
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
-    "install:test": "rm -f *.tgz && npm pack && cd test && npm run clean && npm install",
-    "clean": "rm -f *.tgz && cd test && npm run clean",
-    "sync:test2src": "rsync -rv --include '*/' --include '*.cs' --exclude '*' --prune-empty-dirs test/Assets/Plugins/${npm_package_scope}/${npm_package_name}/ ./src/${npm_package_name}/"
+    "install:test": "npm pack && cp ${npm_package_name}-${npm_package_version}.tgz ${npm_package_name}-latest.tgz && cd test && npm run clean && npm install",
+    "clean": "rm -f *.tgz package-lock.json && cd test && npm run clean",
+    "sync:test2src": "rsync -rv --include '*/' --include '*.cs' --exclude '*' --prune-empty-dirs test/Assets/Plugins/${npm_package_scope}/${npm_package_name}/ ./src/${npm_package_name}/",
+    "preinstall:test": "rm -f *.tgz",
+    "template:update": "node scripts/template-update.js",
+    "cp:test2src": "cd test && node scripts/cp-test2src.js",
+    "overwrite:test2src": "cd test && node scripts/overwrite-test2src.js",
+    "version": "git add -A",
+    "postversion": "git push && git push --tags && npm run clean"
   },
   "dependencies": {
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
-    "bindings": "beatthat/bindings#semver:^0.0.4",
-    "pools": "beatthat/pools#semver:^0.0.7",
-    "type-utils": "beatthat/type-utils#semver:^0.0.5"
-  }
+    "bindings": "beatthat/bindings#semver:^1.0.0",
+    "pools": "beatthat/pools#semver:^1.0.0",
+    "type-utils": "beatthat/type-utils#semver:^1.0.0",
+    "path": "^0.12.7",
+    "unity-npm-utils": "github:beatthat/unity-npm-utils#semver:^1.0.0"
+  },
+  "devDependencies": {}
 }
