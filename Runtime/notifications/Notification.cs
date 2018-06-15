@@ -1,17 +1,15 @@
-using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
-namespace BeatThat.App
+namespace BeatThat.Notifications
 {
-	/// <summary>
-	/// Default Notification object type passed that to listeners by the NotificationBus (listeners can also bind a custom type via generics).
-	/// Notifications are identified by their 'type'
-	/// Additionally, notifications may pass a single param 'body'
-	/// or if a notification has muliple params it may pass key value properties.
-	/// </summary>
-	public struct Notification 
+    /// <summary>
+    /// Default Notification object type passed that to listeners by the NotificationBus (listeners can also bind a custom type via generics).
+    /// Notifications are identified by their 'type'
+    /// Additionally, notifications may pass a single param 'body'
+    /// or if a notification has muliple params it may pass key value properties.
+    /// </summary>
+    public struct Notification 
 	{
 		public Notification(string type, NotificationReceiverOptions opts = NotificationReceiverOptions.RequireReceiver) : this(type, null, opts)
 		{
@@ -128,3 +126,4 @@ namespace BeatThat.App
 	}
 
 }
+

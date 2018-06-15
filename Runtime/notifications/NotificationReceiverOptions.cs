@@ -1,10 +1,8 @@
-using UnityEngine;
-using System.Collections;
-
-namespace BeatThat.App
+namespace BeatThat.Notifications
 {
-	public enum NotificationReceiverOptions 
+    public enum NotificationReceiverOptions 
 	{
 		RequireReceiver = 0, DontRequireReceiver = 1
 	}
 }
+

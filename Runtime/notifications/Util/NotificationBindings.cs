@@ -1,12 +1,12 @@
-using System.Collections.Generic;
+using BeatThat.Pools;
 
-namespace BeatThat.App
+namespace BeatThat.Notifications
 {
-	/// <summary>
-	/// Utility class manages a set of notification bindings
-	/// and provides a safe single point where all bindings can be unbound.
-	/// </summary>
-	public class NotificationBindings
+    /// <summary>
+    /// Utility class manages a set of notification bindings
+    /// and provides a safe single point where all bindings can be unbound.
+    /// </summary>
+    public class NotificationBindings
 	{
 		public void Add(NotificationBinding b)
 		{
@@ -30,4 +30,6 @@ namespace BeatThat.App
 		private ListPoolList<NotificationBinding> m_bindings;
 	}
 }
+
+
 

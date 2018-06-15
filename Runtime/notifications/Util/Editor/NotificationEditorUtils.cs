@@ -1,6 +1,6 @@
-namespace BeatThat.App
+namespace BeatThat.Notifications
 {
-	public static class NotificationEditorUtils 
+    public static class NotificationEditorUtils 
 	{
 		public static string[] GetAllNotificationTypes()
 		{
@@ -8,3 +8,4 @@ namespace BeatThat.App
 		}
 	}
 }
+

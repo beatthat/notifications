@@ -1,14 +1,15 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
+using BeatThat.Pools;
+using UnityEngine;
 
-namespace BeatThat.App
+namespace BeatThat.Notifications
 {
-	/// <summary>
-	/// A global publish/subscribe singleton that allows very loose coupling 
-	/// between notification publishers and notification subscribers.
-	/// </summary>
-	public class NotificationBus 
+    /// <summary>
+    /// A global publish/subscribe singleton that allows very loose coupling 
+    /// between notification publishers and notification subscribers.
+    /// </summary>
+    public class NotificationBus 
 	{		
 		public static NotificationBus instance
 		{
@@ -561,4 +562,6 @@ namespace BeatThat.App
 		private static NotificationBus INSTANCE;
 	}
 }
+
+
 

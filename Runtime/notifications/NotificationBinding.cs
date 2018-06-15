@@ -1,7 +1,9 @@
-namespace BeatThat.App
+using BeatThat.Bindings;
+namespace BeatThat.Notifications
 {
-	public interface NotificationBinding : Binding
+    public interface NotificationBinding : Binding
 	{
 		string notificationType { get; }
 	}
 }
+

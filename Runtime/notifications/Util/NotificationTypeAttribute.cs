@@ -1,13 +1,12 @@
-using UnityEngine;
-using System.Collections;
 using System;
 
-namespace BeatThat.App
+namespace BeatThat.Notifications
 {
-	
-	[AttributeUsage(AttributeTargets.Field)]
+
+    [AttributeUsage(AttributeTargets.Field)]
 	public class NotificationTypeAttribute : System.Attribute 
 	{
 
 	}
 }
+
