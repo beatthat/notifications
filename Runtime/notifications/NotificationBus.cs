@@ -254,6 +254,10 @@ namespace BeatThat.Notifications
 		/// </summary>
 		public void SendNotification(string type, NotificationReceiverOptions opts = NotificationReceiverOptions.RequireReceiver) 
 		{
+            if(this.isLoopDetectionEnabled && DetectLoopOnSend(type)) {
+                return;
+            }
+
 			bool anyBindings = false;
 			
 			List<NotificationBindingBase> bindings = BindingsForType(type, false);
@@ -280,10 +284,20 @@ namespace BeatThat.Notifications
 				Debug.LogError("[" + Time.frameCount + "] No listeners for notification sent with type '" + type + "'");
 				#endif
 			}
+
+            if(this.isLoopDetectionEnabled) {
+                DecrementLoopDetectionCount(type);
+            }
 		}
 
-		public void SendNotificationWithBody<T>(string type, T body, NotificationReceiverOptions opts = NotificationReceiverOptions.RequireReceiver) 
+
+        public void SendNotificationWithBody<T>(string type, T body, NotificationReceiverOptions opts = NotificationReceiverOptions.RequireReceiver) 
 		{
+            if (this.isLoopDetectionEnabled && DetectLoopOnSend(type))
+            {
+                return;
+            }
+
 			bool anyBindings = false;
 			
 			List<NotificationBindingBase> bindings = BindingsForType(type, false);
@@ -323,6 +337,11 @@ namespace BeatThat.Notifications
 				Debug.LogError("[" + Time.frameCount + "] No listeners for notification sent with type '" + type + "'");
 				#endif
 			}
+
+            if (this.isLoopDetectionEnabled)
+            {
+                DecrementLoopDetectionCount(type);
+            }
 		}
 
 		private string EffectiveType(string type)
@@ -363,17 +382,6 @@ namespace BeatThat.Notifications
 					bindings.Dispose();
 				}
 			}
-
-//#if DEBUG_ENABLED
-//			if(didRemove) {
-//				Debug.Log ("[" + Time.time + "] " + GetType() + "::RemoveBinding '" 
-//				           + type + "' FOUND AND REMOVED BINDING");
-//			}
-//			else {
-//				Debug.Log ("[" + Time.time + "] " + GetType() + "::RemoveBinding '" 
-//				           + type + "' NOT FOUND");
-//			}
-//#endif
 
 			return didRemove;
 		}
@@ -556,7 +564,41 @@ namespace BeatThat.Notifications
 			private bool m_checkGameObjectBeforeSend;
 		}
 
-		private readonly Dictionary<string, ListPoolList<NotificationBindingBase>> m_bindingsByType 
+
+#if (UNITY_EDITOR && !NOTIFICATION_LOOP_DETECTION_DISABLE) || NOTIFICATION_LOOP_DETECTION_ENABLE
+        private bool isLoopDetectionEnabled { get { return true; } }
+
+        private const int LOOP_DETECTION_MAX_ACTIVE_COUNT = 100;
+        private bool DetectLoopOnSend(string notification)
+        {
+            int activeCount = 0;
+            activeCount = m_activeCountByNotificationType.TryGetValue(notification, out activeCount) ? activeCount : 0;
+            m_activeCountByNotificationType[notification] = (++activeCount);
+
+            if (activeCount < LOOP_DETECTION_MAX_ACTIVE_COUNT)
+            {
+                return false;
+            }
+
+            Debug.LogError("[" + Time.frameCount + "] loop detected on notification '" + notification
+                             + "'. The notification will NOT be sent to avoid a a crash. Review call stack to identify problem. To disable this behaviour in the Unity Editor define NOTIFICATION_LOOP_DETECTION_DISABLE");
+
+            return true;
+        }
+
+        private void DecrementLoopDetectionCount(string notification)
+        {
+            int activeCount = 0;
+            activeCount = m_activeCountByNotificationType.TryGetValue(notification, out activeCount) ? activeCount : 0;
+            m_activeCountByNotificationType[notification] = (--activeCount);
+        }
+
+        private Dictionary<string, int> m_activeCountByNotificationType = new Dictionary<string, int>();
+#else 
+        private bool isLoopDetectionEnabled { get { return false; } }
+#endif
+
+        private readonly Dictionary<string, ListPoolList<NotificationBindingBase>> m_bindingsByType 
 		= new Dictionary<string, ListPoolList<NotificationBindingBase>>();
 
 		private static NotificationBus INSTANCE;
