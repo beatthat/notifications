@@ -254,11 +254,13 @@ namespace BeatThat.Notifications
 		/// </summary>
 		public void SendNotification(string type, NotificationReceiverOptions opts = NotificationReceiverOptions.RequireReceiver) 
 		{
-            if(this.isLoopDetectionEnabled && DetectLoopOnSend(type)) {
+#if (UNITY_EDITOR && !NOTIFICATION_LOOP_DETECTION_DISABLE) || NOTIFICATION_LOOP_DETECTION_ENABLE
+            if(DetectLoopOnSend(type)) {
                 return;
             }
+#endif
 
-			bool anyBindings = false;
+            bool anyBindings = false;
 			
 			List<NotificationBindingBase> bindings = BindingsForType(type, false);
 			if(bindings != null) {
@@ -285,64 +287,73 @@ namespace BeatThat.Notifications
 				#endif
 			}
 
-            if(this.isLoopDetectionEnabled) {
-                DecrementLoopDetectionCount(type);
-            }
+#if (UNITY_EDITOR && !NOTIFICATION_LOOP_DETECTION_DISABLE) || NOTIFICATION_LOOP_DETECTION_ENABLE
+            DecrementLoopDetectionCount(type);
+#endif
 		}
 
 
-        public void SendNotificationWithBody<T>(string type, T body, NotificationReceiverOptions opts = NotificationReceiverOptions.RequireReceiver) 
-		{
-            if (this.isLoopDetectionEnabled && DetectLoopOnSend(type))
+        public void SendNotificationWithBody<T>(string type, T body, NotificationReceiverOptions opts = NotificationReceiverOptions.RequireReceiver)
+        {
+
+#if (UNITY_EDITOR && !NOTIFICATION_LOOP_DETECTION_DISABLE) || NOTIFICATION_LOOP_DETECTION_ENABLE
+            if (DetectLoopOnSend(type))
             {
                 return;
             }
+#endif
 
-			bool anyBindings = false;
-			
-			List<NotificationBindingBase> bindings = BindingsForType(type, false);
-			if(bindings != null && bindings.Count > 0) {
-				for(int i = bindings.Count - 1; i >= 0; i--) {
-					
-					i = (i < bindings.Count) ? i : bindings.Count - 1;
-					if (i < 0) {
-						break;
-					}
+            bool anyBindings = false;
 
-					if(bindings[i] is NoArgNotificationBinding) {
-						(bindings[i] as NoArgNotificationBinding).Send();
-						anyBindings = true;
-						continue;
-					}
-
-					if(bindings[i].GetType() == typeof(OneArgNotificationBinding<Notification>) && !(body is Notification)) {
-						(bindings[i] as OneArgNotificationBinding<Notification>).SendBody(new Notification(type, body, opts));
-						anyBindings = true;
-						continue;
-					}
-
-					var b = bindings[i] as OneArgNotificationBinding<T>;
-					if(b != null) {
-						b.SendBody(body);
-						anyBindings = true;
-						continue;
-					}
-						
-					anyBindings |= bindings[i].SendObject((object)body);
-				}
-			}
-			
-			if(!anyBindings && opts == NotificationReceiverOptions.RequireReceiver) {
-				#if BT_DEBUG_UNSTRIP || UNITY_EDITOR
-				Debug.LogError("[" + Time.frameCount + "] No listeners for notification sent with type '" + type + "'");
-				#endif
-			}
-
-            if (this.isLoopDetectionEnabled)
+            List<NotificationBindingBase> bindings = BindingsForType(type, false);
+            if (bindings != null && bindings.Count > 0)
             {
-                DecrementLoopDetectionCount(type);
+                for (int i = bindings.Count - 1; i >= 0; i--)
+                {
+
+                    i = (i < bindings.Count) ? i : bindings.Count - 1;
+                    if (i < 0)
+                    {
+                        break;
+                    }
+
+                    if (bindings[i] is NoArgNotificationBinding)
+                    {
+                        (bindings[i] as NoArgNotificationBinding).Send();
+                        anyBindings = true;
+                        continue;
+                    }
+
+                    if (bindings[i].GetType() == typeof(OneArgNotificationBinding<Notification>) && !(body is Notification))
+                    {
+                        (bindings[i] as OneArgNotificationBinding<Notification>).SendBody(new Notification(type, body, opts));
+                        anyBindings = true;
+                        continue;
+                    }
+
+                    var b = bindings[i] as OneArgNotificationBinding<T>;
+                    if (b != null)
+                    {
+                        b.SendBody(body);
+                        anyBindings = true;
+                        continue;
+                    }
+
+                    anyBindings |= bindings[i].SendObject((object)body);
+                }
             }
-		}
+
+            if (!anyBindings && opts == NotificationReceiverOptions.RequireReceiver)
+            {
+#if BT_DEBUG_UNSTRIP || UNITY_EDITOR
+                Debug.LogError("[" + Time.frameCount + "] No listeners for notification sent with type '" + type + "'");
+#endif
+            }
+
+#if (UNITY_EDITOR && !NOTIFICATION_LOOP_DETECTION_DISABLE) || NOTIFICATION_LOOP_DETECTION_ENABLE
+            DecrementLoopDetectionCount(type);
+#endif
+        }
 
 		private string EffectiveType(string type)
 		{
@@ -566,8 +577,6 @@ namespace BeatThat.Notifications
 
 
 #if (UNITY_EDITOR && !NOTIFICATION_LOOP_DETECTION_DISABLE) || NOTIFICATION_LOOP_DETECTION_ENABLE
-        private bool isLoopDetectionEnabled { get { return true; } }
-
         private const int LOOP_DETECTION_MAX_ACTIVE_COUNT = 100;
         private bool DetectLoopOnSend(string notification)
         {
@@ -594,8 +603,7 @@ namespace BeatThat.Notifications
         }
 
         private Dictionary<string, int> m_activeCountByNotificationType = new Dictionary<string, int>();
-#else 
-        private bool isLoopDetectionEnabled { get { return false; } }
+
 #endif
 
         private readonly Dictionary<string, ListPoolList<NotificationBindingBase>> m_bindingsByType 
