@@ -1,3 +1,5 @@
+using BeatThat.TypeUtil;
+
 namespace BeatThat.Notifications
 {
     public static class NotificationEditorUtils 
