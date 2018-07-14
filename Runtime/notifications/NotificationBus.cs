@@ -265,19 +265,32 @@ namespace BeatThat.Notifications
 			List<NotificationBindingBase> bindings = BindingsForType(type, false);
 			if(bindings != null) {
 				for(int i = bindings.Count - 1; i >= 0; i--) {
-					if(bindings[i] is NoArgNotificationBinding) {
-						(bindings[i] as NoArgNotificationBinding).Send();
-						anyBindings = true;
-						continue;
-					}
+                    try
+                    {
 
-					if(bindings[i].GetType() == typeof(OneArgNotificationBinding<Notification>)) {
-						(bindings[i] as OneArgNotificationBinding<Notification>).SendBody(new Notification(type, null, opts));
-						anyBindings = true;
-						continue;
-					}
 
-					Debug.LogWarning("[" + Time.frameCount + "] '" + type + "' sent with no args and encountered a binding that expects args: " + bindings[i]);
+                        if (bindings[i] is NoArgNotificationBinding)
+                        {
+                            (bindings[i] as NoArgNotificationBinding).Send();
+                            anyBindings = true;
+                            continue;
+                        }
+
+                        if (bindings[i].GetType() == typeof(OneArgNotificationBinding<Notification>))
+                        {
+                            (bindings[i] as OneArgNotificationBinding<Notification>).SendBody(new Notification(type, null, opts));
+                            anyBindings = true;
+                            continue;
+                        }
+
+                        Debug.LogWarning("[" + Time.frameCount + "] '" + type
+                                         + "' sent with no args and encountered a binding that expects args: " + bindings[i]);
+                    }
+                    catch(Exception e) {
+                        // rather not catch exceptions, but a since observer who throws an error 
+                        //shouldn't prevent other observers from receiving note
+                        Debug.LogError(e.Message);
+                    }
 				}
 			}
 			
@@ -310,36 +323,43 @@ namespace BeatThat.Notifications
             {
                 for (int i = bindings.Count - 1; i >= 0; i--)
                 {
-
-                    i = (i < bindings.Count) ? i : bindings.Count - 1;
-                    if (i < 0)
+                    try
                     {
-                        break;
-                    }
+                        i = (i < bindings.Count) ? i : bindings.Count - 1;
+                        if (i < 0)
+                        {
+                            break;
+                        }
 
-                    if (bindings[i] is NoArgNotificationBinding)
-                    {
-                        (bindings[i] as NoArgNotificationBinding).Send();
-                        anyBindings = true;
-                        continue;
-                    }
+                        if (bindings[i] is NoArgNotificationBinding)
+                        {
+                            (bindings[i] as NoArgNotificationBinding).Send();
+                            anyBindings = true;
+                            continue;
+                        }
 
-                    if (bindings[i].GetType() == typeof(OneArgNotificationBinding<Notification>) && !(body is Notification))
-                    {
-                        (bindings[i] as OneArgNotificationBinding<Notification>).SendBody(new Notification(type, body, opts));
-                        anyBindings = true;
-                        continue;
-                    }
+                        if (bindings[i].GetType() == typeof(OneArgNotificationBinding<Notification>) && !(body is Notification))
+                        {
+                            (bindings[i] as OneArgNotificationBinding<Notification>).SendBody(new Notification(type, body, opts));
+                            anyBindings = true;
+                            continue;
+                        }
 
-                    var b = bindings[i] as OneArgNotificationBinding<T>;
-                    if (b != null)
-                    {
-                        b.SendBody(body);
-                        anyBindings = true;
-                        continue;
-                    }
+                        var b = bindings[i] as OneArgNotificationBinding<T>;
+                        if (b != null)
+                        {
+                            b.SendBody(body);
+                            anyBindings = true;
+                            continue;
+                        }
 
-                    anyBindings |= bindings[i].SendObject((object)body);
+                        anyBindings |= bindings[i].SendObject((object)body);
+                    }
+                    catch(Exception e) {
+                        // rather not catch exceptions, but a since observer who throws an error 
+                        //shouldn't prevent other observers from receiving note
+                        Debug.LogError(e.Message);
+                    }
                 }
             }
 
