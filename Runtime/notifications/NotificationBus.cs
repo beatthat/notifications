@@ -283,13 +283,18 @@ namespace BeatThat.Notifications
                             continue;
                         }
 
+#if UNITY_EDITOR || DEBUG_UNSTRIP
                         Debug.LogWarning("[" + Time.frameCount + "] '" + type
                                          + "' sent with no args and encountered a binding that expects args: " + bindings[i]);
+#endif
                     }
-                    catch(Exception e) {
+                    catch (Exception e)
+                    {
                         // rather not catch exceptions, but a since observer who throws an error 
                         //shouldn't prevent other observers from receiving note
-                        Debug.LogError(e.Message);
+#if UNITY_EDITOR || DEBUG_UNSTRIP
+                        Debug.LogError("Error on send notification " + type + ":" + e.Message + "\n" + e.StackTrace);
+#endif
                     }
 				}
 			}
