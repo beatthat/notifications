@@ -525,9 +525,11 @@ namespace BeatThat.Notifications
 						#pragma warning disable 0168
 						catch(Exception e) {
 							#if UNITY_EDITOR || BT_DEBUG_UNSTRIP
-							Debug.LogError("[" + Time.frameCount + "] invalid cast to listener type " + typeof(T) 
-								+ " for notification body with type " 
-								+ ((body != null)? body.GetType().ToString(): "null"));
+                            Debug.LogError("[" + Time.frameCount + "] notification type '" + this.notificationType 
+                                           + " illegal cast to listener type " + typeof(T) 
+								           + " for notification body with type " 
+								           + ((body != null)? body.GetType().ToString(): "null")
+                                          );
 							#endif
 							return false;
 						}
