@@ -360,10 +360,11 @@ namespace BeatThat.Notifications
 
                         anyBindings |= bindings[i].SendObject((object)body);
                     }
-                    catch(Exception e) {
+                    catch (Exception e)
+                    {
                         // rather not catch exceptions, but a since observer who throws an error 
                         //shouldn't prevent other observers from receiving note
-                        Debug.LogError(e.Message);
+                        Debug.LogError("Error on send notification " + type + " (body=" + body + "):" + e.Message + "\n" + e.StackTrace);
                     }
                 }
             }
