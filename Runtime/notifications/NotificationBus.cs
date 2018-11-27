@@ -300,8 +300,8 @@ namespace BeatThat.Notifications
 			}
 			
 			if(!anyBindings && opts == NotificationReceiverOptions.RequireReceiver) {
-				#if BT_DEBUG_UNSTRIP || UNITY_EDITOR
-				Debug.LogError("[" + Time.frameCount + "] No listeners for notification sent with type '" + type + "'");
+				#if DEBUG_UNSTRIP || UNITY_EDITOR
+                Debug.LogWarning("[" + Time.frameCount + "] No listeners for notification sent with type '" + type + "'");
 				#endif
 			}
 
@@ -371,8 +371,8 @@ namespace BeatThat.Notifications
 
             if (!anyBindings && opts == NotificationReceiverOptions.RequireReceiver)
             {
-#if BT_DEBUG_UNSTRIP || UNITY_EDITOR
-                Debug.LogError("[" + Time.frameCount + "] No listeners for notification sent with type '" + type + "'");
+#if DEBUG_UNSTRIP || UNITY_EDITOR
+                Debug.LogWarning("[" + Time.frameCount + "] No listeners for notification sent with type '" + type + "'");
 #endif
             }
 
@@ -510,7 +510,7 @@ namespace BeatThat.Notifications
 						}
 						#pragma warning disable 0168
 						catch(Exception e) {
-							#if UNITY_EDITOR || BT_DEBUG_UNSTRIP
+							#if UNITY_EDITOR || DEBUG_UNSTRIP
 							Debug.LogError("[" + Time.frameCount + "] invalid cast to listener type " + typeof(T) 
 								+ " for notification body with type " 
 								+ ((body != null)? body.GetType().ToString(): "null"));
@@ -525,7 +525,7 @@ namespace BeatThat.Notifications
 						}
 						#pragma warning disable 0168
 						catch(Exception e) {
-							#if UNITY_EDITOR || BT_DEBUG_UNSTRIP
+							#if UNITY_EDITOR || DEBUG_UNSTRIP
                             Debug.LogError("[" + Time.frameCount + "] notification type '" + this.notificationType 
                                            + " illegal cast to listener type " + typeof(T) 
 								           + " for notification body with type " 
