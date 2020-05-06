@@ -1,7 +1,7 @@
 {
   "name": "notifications",
   "scope": "beatthat",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "description": "Global system for pub/sub notification events by string 'type'.",
   "main": "index.js",
   "repository": {
